@@ -20,6 +20,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 
 // sync sequelize models to the database, then turn on the server
+sequelize
+  .sync()
+  .then(() => {
+    console.log("Synced successfully!");
+  })
+  .catch((error) => {
+    console.error("Unable to sync: ", error);
+  });
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}!`);
 });
