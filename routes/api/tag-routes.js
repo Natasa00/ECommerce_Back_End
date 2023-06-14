@@ -66,7 +66,6 @@ router.put("/:id", (req, res) => {
     }
   )
     .then((tag) => {
-      console.log(tag)
       if (req.body.productIds && req.body.productIds.length) {
         ProductTag.findAll({
           where: { tag_id: req.params.id },
@@ -104,8 +103,22 @@ router.put("/:id", (req, res) => {
     });
 });
 
+// delete on tag by its `id` value
 router.delete("/:id", (req, res) => {
-  // delete on tag by its `id` value
+  Tag.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then(() => {
+      return ProductTag.destroy({
+        where: {
+          tag_id: req.params.id,
+        },
+      });
+    })
+    .then((tag) => res.json(tag))
+    .catch((err) => res.json(err));
 });
 
 module.exports = router;
